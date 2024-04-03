@@ -1,0 +1,42 @@
+<template>
+    <lightning-record-edit-form object-api-name={objectName} record-id={recordId} onsubmit={handleSubmit} onsuccess={handleSuccess}>
+        <div class="slds-grid slds-gutters slds-is-relative">
+            <template for:each={fields} for:item="col">
+                <div class="slds-col slds-size_1-of-2" key={col.index}>
+                    <template for:each={col} for:item='column' key={column.APIName}>
+                        <template if:false={allowEdit}>
+                            <lightning-output-field class="slds-border_bottom" key={column.APIName} field-name={column.APIName}></lightning-output-field>
+                        </template>
+                        <template if:true={allowEdit}>
+                            <template if:false={editView}>
+                                <div key={column.APIName} class="slds-grid">
+                                    <lightning-output-field class="slds-border_bottom" key={column.APIName} field-name={column.APIName}></lightning-output-field>
+                                    <template if:false={column.ReadOnly}>
+                                        <lightning-button-icon class="slds-align-bottom slds-m-bottom_medium" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" onclick={handleEditClick}></lightning-button-icon>
+                                    </template>
+                                </div>
+                            </template>
+                            <template if:true={editView}>
+                                <template if:false={column.ReadOnly}>
+                                    <lightning-input-field key={column.APIName} field-name={column.APIName}></lightning-input-field>
+                                </template>
+                                <template if:true= {column.ReadOnly}>
+                                    <lightning-output-field key={column.APIName} field-name={column.APIName}></lightning-output-field>
+                                </template>
+                            </template>
+                        </template>
+                    </template>
+                </div>
+            </template>
+            <template if:true={showLotInfoSpinner}>
+                <c-spinner-component spinner-text=""></c-spinner-component>
+            </template>
+        </div>
+        <template if:true={editView}>
+            <div class="slds-m-top_large slds-grid slds-grid_align-center slds-color__background_gray-1">
+                <lightning-button class="slds-m-around_xxx-small" label="Cancel" onclick={handleEditCancel}></lightning-button>
+                <lightning-button class="slds-m-around_xxx-small" label="Save" type="submit" variant="brand" ></lightning-button>
+            </div>
+        </template>
+    </lightning-record-edit-form>
+</template>
